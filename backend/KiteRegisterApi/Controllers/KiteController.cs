@@ -20,14 +20,14 @@ namespace KiteRegisterApi.Controllers
 
         // GET: api/Kite
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Kite>>> GetKites()
+        public async Task<ActionResult<IEnumerable<KiteDto>>> GetKites()
         {
-            return await _context.Kites.ToListAsync();
+            return await _context.Kites.Select(kite => KiteToDto(kite)).ToListAsync();
         }
 
         // GET: api/Kite/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Kite>> GetKite(int id)
+        public async Task<ActionResult<KiteDto>> GetKite(int id)
         {
             var kite = await _context.Kites.FindAsync(id);
 
@@ -36,56 +36,47 @@ namespace KiteRegisterApi.Controllers
                 return NotFound();
             }
 
-            return kite;
+            return KiteToDto(kite);
         }
 
         // PUT: api/Kite/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutKite(int id, Kite kite)
+        public async Task<IActionResult> PutKite(int id, KiteDto kiteDto)
         {
-            if (id != kite.Id)
-            {
-                return BadRequest();
-            }
+            if (id != kiteDto.KiteId) return BadRequest();
 
-            _context.Entry(kite).State = EntityState.Modified;
+            var kite = await _context.Kites.FindAsync(id);
+            if (kite == null) return NotFound();
+
+            kite.UpdateDetails(kiteDto.Size, kiteDto.PrincipalColor, kiteDto.PurchaseDate);
+            kite.UpdateKiteModel(kiteDto.KiteModelId);
 
             try
             {
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException) when (!KiteExists(id))
             {
-                if (!KiteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
-
             return NoContent();
         }
 
         // POST: api/Kite
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Kite>> PostKite(Kite kite)
+        public async Task<ActionResult<KiteDto>> PostKite(KiteDto kiteDto)
         {
+            var kite = new Kite(kiteDto.Size, kiteDto.PrincipalColor, kiteDto.PurchaseDate, kiteDto.KiteModelId);
+
             _context.Kites.Add(kite);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetKite), new { id = kite.Id }, kite);
+            return CreatedAtAction(nameof(GetKite), new { id = kiteDto.KiteId }, KiteToDto(kite));
         }
 
         // DELETE: api/Kite/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Kite>> DeleteKite(int id)
+        public async Task<IActionResult> DeleteKite(int id)
         {
             var kite = await _context.Kites.FindAsync(id);
             if (kite == null)
@@ -96,12 +87,18 @@ namespace KiteRegisterApi.Controllers
             _context.Kites.Remove(kite);
             await _context.SaveChangesAsync();
 
-            return kite;
+            return NoContent();
         }
 
         private bool KiteExists(int id)
         {
-            return _context.Kites.Any(e => e.Id == id);
+            return _context.Kites.Any(e => e.KiteId == id);
         }
+
+        private static KiteDto KiteToDto(Kite kite)
+        {
+            return new KiteDto() { KiteId = kite.KiteId, KiteModelId = kite.KiteModelId, PrincipalColor = kite.PrincipalColor, PurchaseDate = kite.PurchaseDate, Size = kite.Size };
+        }
+
     }
 }
