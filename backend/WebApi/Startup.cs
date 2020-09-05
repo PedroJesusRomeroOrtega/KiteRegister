@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace KiteRegister.WebApi
 {
@@ -22,6 +23,7 @@ namespace KiteRegister.WebApi
         {
             services.AddDbContext<KiteRegisterContext>(opt => opt.UseInMemoryDatabase("KiteRegister"));
             services.AddControllers();
+            services.AddSwaggerGen(opt => opt.SwaggerDoc("v1", new OpenApiInfo { Title = "KiteRegisterApi", Version = "v1" }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +39,9 @@ namespace KiteRegister.WebApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(opt => opt.SwaggerEndpoint("/swagger/v1/swagger.json", "Kite Register V1"));
 
             app.UseEndpoints(endpoints =>
             {
