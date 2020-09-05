@@ -1,10 +1,9 @@
 using System;
 
-namespace KiteRegisterApi.Models
+namespace KiteRegister.Core.Entities
 {
-    public class Kite
+    public class Kite:BaseEntity
     {
-        public int KiteId { get; private set; }
         public int Size { get; private set; }
         public int PrincipalColor { get; private set; }
         public DateTime PurchaseDate { get; private set; }

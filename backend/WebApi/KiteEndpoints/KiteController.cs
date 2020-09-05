@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using KiteRegisterApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using KiteRegister.Infrastructure.Data;
+using KiteRegister.Core.Entities;
 
-namespace KiteRegisterApi.Controllers
+namespace KiteRegister.WebApi.KiteEndpoints
 {
     [Route("api/kites")]
     [ApiController]
@@ -92,12 +93,12 @@ namespace KiteRegisterApi.Controllers
 
         private bool KiteExists(int id)
         {
-            return _context.Kites.Any(e => e.KiteId == id);
+            return _context.Kites.Any(e => e.Id == id);
         }
 
         private static KiteDto KiteToDto(Kite kite)
         {
-            return new KiteDto() { KiteId = kite.KiteId, KiteModelId = kite.KiteModelId, PrincipalColor = kite.PrincipalColor, PurchaseDate = kite.PurchaseDate, Size = kite.Size };
+            return new KiteDto() { KiteId = kite.Id, KiteModelId = kite.KiteModelId, PrincipalColor = kite.PrincipalColor, PurchaseDate = kite.PurchaseDate, Size = kite.Size };
         }
 
     }
