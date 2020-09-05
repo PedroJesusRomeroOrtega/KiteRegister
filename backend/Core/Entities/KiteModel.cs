@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace KiteRegisterApi.Models
+namespace KiteRegister.Core.Entities
 {
-    public class KiteModel
+    public class KiteModel: BaseEntity
     {
-        public int KiteModelId { get; private set; }
         public string Name { get; private set; }
         public string Url { get; private set; }
         public int? YearProduction { get; private set; }

@@ -1,6 +1,7 @@
+using KiteRegister.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace KiteRegisterApi.Models
+namespace KiteRegister.Infrastructure.Data
 {
     public class KiteRegisterContext : DbContext
     {

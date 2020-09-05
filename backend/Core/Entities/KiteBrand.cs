@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace KiteRegisterApi.Models
+namespace KiteRegister.Core.Entities
 {
-    public class KiteBrand
+    public class KiteBrand : BaseEntity
     {
-        public int KiteBrandId { get; set; }
         public string Name { get; set; }
         public string Url { get; set; }
 

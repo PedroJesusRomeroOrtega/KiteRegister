@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using KiteRegister.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace KiteRegisterApi.Models
+namespace KiteRegister.Infrastructure.Data
 {
     public class KiteRegisterContextSeed
     {
