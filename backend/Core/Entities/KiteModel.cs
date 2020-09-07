@@ -5,8 +5,8 @@ namespace KiteRegister.Core.Entities
     public class KiteModel: BaseEntity
     {
         public string Name { get; private set; }
-        public string Url { get; private set; }
         public int? YearProduction { get; private set; }
+        public string Url { get; private set; }
 
         public int KiteBrandId { get; private set; }
         public KiteBrand KiteBrand { get; private set; }
